@@ -25,3 +25,7 @@ _testmain.go
 *.prof
 fota/fota
 fota/routers/commentsRouter_fota_fota_controllers.go
+
+# Intellij Idea
+.idea/
+fota.iml
