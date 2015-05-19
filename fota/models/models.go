@@ -1,6 +1,8 @@
 package models
 
 import(
+	"fmt"
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -9,7 +11,16 @@ func init(){
 	orm.RegisterDriver("mysql", orm.DR_MySQL)
 
 	//register the database
-	orm.RegisterDataBase("default", "mysql", "root:root@/fota?charset=utf8")
+	dbhost := beego.AppConfig.String("dhbost")
+	dbport, err := beego.AppConfig.Int("dbport")
+	if err != nil {
+		dbport = 3306
+	}
+	dbuser := beego.AppConfig.String("dbuser")
+	dbpwd := beego.AppConfig.String("dbpwd")
+	dbname := beego.AppConfig.String("dbname")
+	connStr := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8", dbuser, dbpwd, dbhost, dbport, dbname)
+	orm.RegisterDataBase("default", "mysql", connStr)
 
 	//register modules
 	orm.RegisterModel(new(ProductFamily), new(ProductCU), new(Package),
