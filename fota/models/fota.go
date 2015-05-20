@@ -1,16 +1,20 @@
 package models
 
+import(
+	"github.com/astaxie/beego/orm"
+)
+
 
 /*table struct*/
 
-//product family table
+//product_family table
 type ProductFamily struct{
 	Id int `orm:"pk"`
 	ProductFamilyName string `orm:"unique"`
 	IsExisted bool
 }
 
-//product&cu table
+//product_cu table, ProductName+CUName is unique
 type ProductCU struct{
 	Id int `orm:"pk"`
 	ProductName string
@@ -42,5 +46,43 @@ type PCUPackage struct{
 	PackageName string
 	IsExisted bool
 }
+
+/*CRUD for product_family table*/
+func InsertProductFamily(productFamilyName string){
+
+	pf := new(ProductFamily)
+	pf.ProductFamilyName = productFamilyName
+
+	o := orm.NewOrm()
+
+	_, err := o.Insert(pf)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func QueryProductFamilyByName(productFamilyName string) *ProductFamily{
+
+	pf := new(ProductFamily)
+	pf.ProductFamilyName = productFamilyName
+
+	o := orm.NewOrm()
+
+	err := o.Read(pf)
+	if err != nil{
+		panic(err)
+	}else{
+		return pf
+	}
+}
+
+
+
+/*CRUD for product_cu table*/
+
+
+
+/*CRUD for package table*/
+
 
 
