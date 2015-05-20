@@ -6,12 +6,19 @@ import (
 	_ "fota/fota/models"
 
 	"github.com/astaxie/beego"
+	_ "fota/fota/initial"
 )
 
-func main() {
+
+func init(){
 	if beego.RunMode == "dev" {
 		beego.DirectoryIndex = true
 		beego.StaticDir["/swagger"] = "swagger"
 	}
+
+}
+
+func main() {
+
 	beego.Run()
 }
