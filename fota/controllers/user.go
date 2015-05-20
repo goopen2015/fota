@@ -20,10 +20,15 @@ type UserController struct {
 // @router / [post]
 func (u *UserController) Post() {
 	var user models.User
-	json.Unmarshal(u.Ctx.Input.RequestBody, &user)
-	uid := models.AddUser(user)
-	u.Data["json"] = map[string]string{"uid": uid}
-	u.ServeJson()
+	if err := json.Unmarshal(u.Ctx.Input.RequestBody, &user); err != nil {
+		beego.Error(err)
+		u.Data["json"] = map[string]string{"error": err.Error()}
+		u.ServeJson()
+	} else {
+		uid := models.AddUser(user)
+		u.Data["json"] = map[string]string{"uid": uid}
+		u.ServeJson()
+	}
 }
 
 // @Title Get
@@ -66,15 +71,20 @@ func (u *UserController) Put() {
 	uid := u.GetString(":uid")
 	if uid != "" {
 		var user models.User
-		json.Unmarshal(u.Ctx.Input.RequestBody, &user)
-		uu, err := models.UpdateUser(uid, &user)
-		if err != nil {
-			u.Data["json"] = err
+		if err := json.Unmarshal(u.Ctx.Input.RequestBody, &user); err != nil {
+			beego.Error(err)
+			u.Data["json"] = map[string]string{"error": err.Error()}
+			u.ServeJson()
 		} else {
-			u.Data["json"] = uu
+			uu, err := models.UpdateUser(uid, &user)
+			if err != nil {
+				u.Data["json"] = map[string]string{"error": err.Error()}
+			} else {
+				u.Data["json"] = uu
+			}
+			u.ServeJson()
 		}
 	}
-	u.ServeJson()
 }
 
 // @Title delete
