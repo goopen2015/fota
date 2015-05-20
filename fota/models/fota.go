@@ -1,16 +1,15 @@
 package models
 
-import(
-	"github.com/astaxie/beego/orm"
+import (
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 )
 
 /*Class for database operation*/
-type CRUDOperator struct{
-
+type CRUDOperator struct {
 }
 
-func (this *CRUDOperator) Insert(model interface{}){
+func (this *CRUDOperator) Insert(model interface{}) {
 
 	o := orm.NewOrm()
 
@@ -20,26 +19,26 @@ func (this *CRUDOperator) Insert(model interface{}){
 	}
 }
 
-func (this *CRUDOperator) Query(model interface{}){
+func (this *CRUDOperator) Query(model interface{}) {
 
 	o := orm.NewOrm()
 
 	err := o.Read(model, "Name")
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 }
 
-func (this *CRUDOperator) Update(model interface{}){
+func (this *CRUDOperator) Update(model interface{}) {
 	o := orm.NewOrm()
 
 	_, err := o.Update(model)
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 }
 
-func (this *CRUDOperator) Delete(model interface{}){
+func (this *CRUDOperator) Delete(model interface{}) {
 	o := orm.NewOrm()
 
 	_, err := o.Delete(model)
@@ -51,14 +50,14 @@ func (this *CRUDOperator) Delete(model interface{}){
 var opr CRUDOperator
 
 //product_family table
-type ProductFamily struct{
-	Id int `orm:"pk"`
-	Name string `orm:"unique"` //productfamily's name
+type ProductFamily struct {
+	Id        int    `orm:"pk"`
+	Name      string `orm:"unique"` //productfamily's name
 	IsExisted bool
 }
 
 /*CRUD for product_family table*/
-func (this *ProductFamily) InsertProductFamily(){
+func (this *ProductFamily) InsertProductFamily() {
 
 	opr.Insert(this)
 
@@ -66,7 +65,7 @@ func (this *ProductFamily) InsertProductFamily(){
 
 }
 
-func (this *ProductFamily) QueryProductFamilyByName(){
+func (this *ProductFamily) QueryProductFamilyByName() {
 
 	opr.Query(this)
 
@@ -74,38 +73,38 @@ func (this *ProductFamily) QueryProductFamilyByName(){
 
 }
 
-func (this *ProductFamily) UpdateProductFamily(){
+func (this *ProductFamily) UpdateProductFamily() {
 
 	opr.Update(this)
 
 	beego.Debug("Update ProductFamily table via productFamilyName is " + this.Name)
 }
 
-func (this *ProductFamily) DelProductFamily(){
+func (this *ProductFamily) DelProductFamily() {
 
 	opr.Delete(this)
 
 	beego.Debug("Delete from ProductFamily table via productFamilyName is " + this.Name)
 }
 
-
 //product_cu table, ProductName+CUName is unique
-type ProductCU struct{
-	Id int `orm:"pk"`
-	Name string //product+cu's name
+type ProductCU struct {
+	Id        int    `orm:"pk"`
+	Name      string //product+cu's name
 	IsExisted bool
 }
+
 /*CRUD for product_cu table*/
-func (this *ProductCU) InsertProductCU(productFamilyName string){
+func (this *ProductCU) InsertProductCU(productFamilyName string) {
 	opr.Insert(this)
 
-	pFamilyPCU := &PFamilyPCU{Name:productFamilyName, ProductCUName:this.Name, IsExisted:true}
+	pFamilyPCU := &PFamilyPCU{Name: productFamilyName, ProductCUName: this.Name, IsExisted: true}
 	opr.Insert(pFamilyPCU)
 
 	beego.Debug("Insert to ProductCU table via ProductCUName is " + this.Name)
 }
 
-func (this *ProductCU) QueryProductCUByName(){
+func (this *ProductCU) QueryProductCUByName() {
 
 	opr.Query(this)
 
@@ -113,14 +112,14 @@ func (this *ProductCU) QueryProductCUByName(){
 
 }
 
-func (this *ProductCU) UpdateProductCU(){
+func (this *ProductCU) UpdateProductCU() {
 
 	opr.Update(this)
 
 	beego.Debug("Update ProductCU table via ProductCUName is " + this.Name)
 }
 
-func (this *ProductCU) DelProductCU(){
+func (this *ProductCU) DelProductCU() {
 
 	opr.Delete(this)
 
@@ -128,22 +127,23 @@ func (this *ProductCU) DelProductCU(){
 }
 
 //package table
-type Package struct{
-	Id int `orm:"pk"`
-	Name string `orm:"unique"`
+type Package struct {
+	Id        int    `orm:"pk"`
+	Name      string `orm:"unique"`
 	IsExisted bool
 }
+
 /*CRUD for package table*/
-func (this *Package) InsertPackage(productCUName string){
+func (this *Package) InsertPackage(productCUName string) {
 	opr.Insert(this)
 
-	pCUPackage := &PCUPackage{Name:productCUName, PackageName:this.Name, IsExisted:true}
+	pCUPackage := &PCUPackage{Name: productCUName, PackageName: this.Name, IsExisted: true}
 	opr.Insert(pCUPackage)
 
 	beego.Debug("Insert to Package table via PackageName is " + this.Name)
 }
 
-func (this *ProductCU) QueryPackageByName(){
+func (this *ProductCU) QueryPackageByName() {
 
 	opr.Query(this)
 
@@ -151,30 +151,30 @@ func (this *ProductCU) QueryPackageByName(){
 
 }
 
-func (this *ProductCU) UpdatePackage(){
+func (this *ProductCU) UpdatePackage() {
 
 	opr.Update(this)
 
 	beego.Debug("Update Package table via PackageName is " + this.Name)
 }
 
-func (this *ProductCU) DelPackage(){
+func (this *ProductCU) DelPackage() {
 
 	opr.Delete(this)
 
 	beego.Debug("Delete from Package table via PackageName is " + this.Name)
 }
 
-
 //relation between product family table and product&cu table
 type PFamilyPCU struct {
-	Id int `orm:"pk"`
-	Name string //productfamily's name
+	Id            int    `orm:"pk"`
+	Name          string //productfamily's name
 	ProductCUName string
-	IsExisted bool
+	IsExisted     bool
 }
+
 /*CRUD for PFamilyPCU table*/
-func (this *PFamilyPCU) InsertPFamilyPCU(){
+func (this *PFamilyPCU) InsertPFamilyPCU() {
 
 	opr.Insert(this)
 
@@ -182,43 +182,43 @@ func (this *PFamilyPCU) InsertPFamilyPCU(){
 
 }
 
-func (this *PFamilyPCU) QueryPFamilyPCU(){
+func (this *PFamilyPCU) QueryPFamilyPCU() {
 
 	o := orm.NewOrm()
 
 	err := o.Read(this, "Name", "ProductCUName")
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 
 	beego.Debug("Query from PFamilyPCU table where product familiy name is " + this.Name +
-					"and productcu name is " + this.ProductCUName)
+		"and productcu name is " + this.ProductCUName)
 }
 
-func (this *PFamilyPCU) UpdatePFamilyPCU(){
+func (this *PFamilyPCU) UpdatePFamilyPCU() {
 
 	opr.Update(this)
 
 	beego.Debug("Update PFamilyPCU table via product familiy name is " + this.Name)
 }
 
-func (this *PFamilyPCU) DelPFamilyPCU(){
+func (this *PFamilyPCU) DelPFamilyPCU() {
 
 	opr.Delete(this)
 
 	beego.Debug("Delete from PFamilyPCU table via product familiy name is " + this.Name)
 }
 
-
 //relation between product&cu table an package table
-type PCUPackage struct{
-	Id int `orm:"pk"`
-	Name string //product+cu's name
+type PCUPackage struct {
+	Id          int    `orm:"pk"`
+	Name        string //product+cu's name
 	PackageName string
-	IsExisted bool
+	IsExisted   bool
 }
+
 /*CRUD for PCUPackage table*/
-func (this *PCUPackage) InsertPCUPackage(){
+func (this *PCUPackage) InsertPCUPackage() {
 
 	opr.Insert(this)
 
@@ -226,33 +226,30 @@ func (this *PCUPackage) InsertPCUPackage(){
 
 }
 
-func (this *PCUPackage) QueryPCUPackage(){
+func (this *PCUPackage) QueryPCUPackage() {
 
 	o := orm.NewOrm()
 
 	err := o.Read(this, "Name", "PackageName")
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 
 	beego.Debug("Query from PCUPackage table where productcu name is " + this.Name +
-	"and package name is " + this.PackageName)
+		"and package name is " + this.PackageName)
 
 }
 
-func (this *PCUPackage) UpdatePCUPackage(){
+func (this *PCUPackage) UpdatePCUPackage() {
 
 	opr.Update(this)
 
 	beego.Debug("Update PFamilyPCU table via product and cu name is " + this.Name)
 }
 
-func (this *PCUPackage) DelPCUPackage(){
+func (this *PCUPackage) DelPCUPackage() {
 
 	opr.Delete(this)
 
 	beego.Debug("Delete from PFamilyPCU table via product and cu name is " + this.Name)
 }
-
-
-

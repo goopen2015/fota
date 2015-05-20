@@ -1,13 +1,13 @@
 package initial
 
-import(
+import (
 	"github.com/astaxie/beego"
 )
 
-func init(){
+func init() {
 	/*init the log*/
 	err := beego.SetLogger("file", `{"filename":"/var/fota.log"}`)
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 

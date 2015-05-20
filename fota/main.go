@@ -2,15 +2,14 @@ package main
 
 import (
 	_ "fota/fota/docs"
-	_ "fota/fota/routers"
 	_ "fota/fota/models"
+	_ "fota/fota/routers"
 
-	"github.com/astaxie/beego"
 	_ "fota/fota/initial"
+	"github.com/astaxie/beego"
 )
 
-
-func init(){
+func init() {
 	if beego.RunMode == "dev" {
 		beego.DirectoryIndex = true
 		beego.StaticDir["/swagger"] = "swagger"

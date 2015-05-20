@@ -1,12 +1,13 @@
 package models
 
-import(
+import (
 	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 )
-func init(){
+
+func init() {
 	//register the driver
 	orm.RegisterDriver("mysql", orm.DR_MySQL)
 
@@ -29,5 +30,3 @@ func init(){
 
 	beego.Debug("Models initiated")
 }
-
-
