@@ -5,6 +5,7 @@ import(
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/astaxie/beego"
 )
 func init(){
 	//register the driver
@@ -27,4 +28,7 @@ func init(){
 		new(PFamilyPCU), new(PCUPackage))
 	orm.RunSyncdb("default", false, true)
 
+	beego.Debug("Models initiated")
 }
+
+
